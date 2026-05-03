@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Story Forge — Where Stories Are Born</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Ambient Background -->
+  <div class="ambient">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <canvas id="particleCanvas"></canvas>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">⚗️</span>
+      <span class="logo-text">AI Story <em>Forge</em></span>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" data-panel="forge">The Forge</button>
+      <button class="nav-btn" data-panel="characters">Characters</button>
+      <button class="nav-btn" data-panel="library">My Library</button>
+    </nav>
+    <div class="header-actions">
+      <span class="story-count" id="storyCount">0 stories</span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- ═══ FORGE PANEL ═══ -->
+    <section class="panel active" id="panel-forge">
+
+      <!-- Left Sidebar: Controls -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <label class="section-label">Genre</label>
+          <div class="genre-grid" id="genreGrid">
+            <button class="genre-btn active" data-genre="fantasy">🧙 Fantasy</button>
+            <button class="genre-btn" data-genre="sci-fi">🚀 Sci-Fi</button>
+            <button class="genre-btn" data-genre="horror">👁️ Horror</button>
+            <button class="genre-btn" data-genre="romance">🌹 Romance</button>
+            <button class="genre-btn" data-genre="mystery">🔍 Mystery</button>
+            <button class="genre-btn" data-genre="thriller">⚡ Thriller</button>
+            <button class="genre-btn" data-genre="historical">🏛️ Historical</button>
+            <button class="genre-btn" data-genre="literary">📖 Literary</button>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <label class="section-label">Tone</label>
+          <div class="tone-row">
+            <button class="tone-btn active" data-tone="dramatic">Dramatic</button>
+            <button class="tone-btn" data-tone="whimsical">Whimsical</button>
+            <button class="tone-btn" data-tone="dark">Dark</button>
+            <button class="tone-btn" data-tone="hopeful">Hopeful</button>
+            <button class="tone-btn" data-tone="humorous">Humorous</button>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <label class="section-label">Length — <span id="wordCountLabel">300</span> words</label>
+          <div class="slider-wrap">
+            <input type="range" id="wordCount" min="100" max="1000" value="300" step="50" class="slider" />
+            <div class="slider-marks">
+              <span>Flash</span><span>Short</span><span>Medium</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section characters-sidebar" id="charactersSidebar">
+          <label class="section-label">Active Characters <span class="char-count" id="charCount">0</span></label>
+          <div class="mini-chars" id="miniChars">
+            <p class="empty-chars">No characters added yet.<br/>Build some in the Characters tab.</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center: The Forge -->
+      <div class="forge-center">
+        <div class="prompt-area">
+          <div class="prompt-header">
+            <span class="prompt-label">Your Story Seed</span>
+            <button class="enhance-btn" id="enhanceBtn" title="Enhance prompt with AI">
+              ✨ Enhance
+            </button>
+          </div>
+          <textarea
+            id="promptInput"
+            class="prompt-input"
+            placeholder="A cartographer discovers her maps are predicting the future, not recording the past..."
+            rows="4"
+          ></textarea>
+          <div class="prompt-footer">
+            <span class="char-counter" id="promptCounter">0 / 500</span>
+            <div class="prompt-actions">
+              <button class="btn-secondary" id="continueBtn" disabled>Continue Story ↩</button>
+              <button class="btn-primary" id="forgeBtn">
+                <span class="btn-text">Forge Story</span>
+                <span class="btn-icon">⚡</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output Area -->
+        <div class="output-area" id="outputArea">
+          <div class="output-placeholder" id="outputPlaceholder">
+            <div class="placeholder-icon">📜</div>
+            <p>Your story will appear here, word by word.</p>
+            <p class="placeholder-sub">Enter a prompt and click Forge Story to begin.</p>
+          </div>
+
+          <div class="story-container hidden" id="storyContainer">
+            <div class="story-header">
+              <div class="story-title-area">
+                <h2 class="story-title" id="storyTitle" contenteditable="true">Untitled Story</h2>
+                <button class="title-gen-btn" id="titleGenBtn">Generate Titles</button>
+              </div>
+              <div class="story-meta">
+                <span id="storyWordCount">0 words</span>
+                <span id="storyGenre">—</span>
+              </div>
+            </div>
+
+            <div class="story-text" id="storyText"></div>
+
+            <div class="story-actions">
+              <button class="action-btn" id="critiqueBtn">🎯 AI Critique</button>
+              <button class="action-btn" id="copyBtn">📋 Copy</button>
+              <button class="action-btn" id="saveBtn">💾 Save</button>
+              <button class="action-btn danger" id="clearBtn">🗑 Clear</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Insights -->
+      <aside class="insights-panel" id="insightsPanel">
+        <div class="insights-header">Story Insights</div>
+
+        <div class="insight-card" id="critiqueCard" style="display:none">
+          <div class="insight-title">AI Critique</div>
+          <div class="score-ring-wrap">
+            <svg class="score-ring" viewBox="0 0 60 60">
+              <circle cx="30" cy="30" r="26" class="ring-bg"/>
+              <circle cx="30" cy="30" r="26" class="ring-fill" id="scoreRing"/>
+            </svg>
+            <div class="score-num" id="scoreNum">—</div>
+          </div>
+          <div class="critique-tags" id="critiqueTags"></div>
+          <div class="critique-section">
+            <div class="critique-label">Strengths</div>
+            <ul class="critique-list" id="strengthsList"></ul>
+          </div>
+          <div class="critique-section">
+            <div class="critique-label">To Improve</div>
+            <ul class="critique-list" id="improvementsList"></ul>
+          </div>
+        </div>
+
+        <div class="insight-card" id="titlesCard" style="display:none">
+          <div class="insight-title">Suggested Titles</div>
+          <ul class="titles-list" id="titlesList"></ul>
+        </div>
+
+        <div class="insight-placeholder" id="insightPlaceholder">
+          <p>Generate a story to unlock AI insights, critique, and title suggestions.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ═══ CHARACTERS PANEL ═══ -->
+    <section class="panel" id="panel-characters">
+      <div class="characters-page">
+        <div class="page-header">
+          <h2 class="page-title">Character Forge</h2>
+          <p class="page-sub">Build rich characters powered by AI</p>
+        </div>
+
+        <div class="char-builder">
+          <div class="char-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Role</label>
+                <select id="charRole" class="form-input">
+                  <option>protagonist</option>
+                  <option>antagonist</option>
+                  <option>mentor</option>
+                  <option>sidekick</option>
+                  <option>love interest</option>
+                  <option>mysterious stranger</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Genre</label>
+                <select id="charGenre" class="form-input">
+                  <option>fantasy</option>
+                  <option>sci-fi</option>
+                  <option>horror</option>
+                  <option>romance</option>
+                  <option>mystery</option>
+                  <option>thriller</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Character Hint (optional)</label>
+              <input type="text" id="charHint" class="form-input" placeholder="e.g. an old sailor who never speaks..." />
+            </div>
+            <button class="btn-primary full-width" id="generateCharBtn">
+              ⚗️ Generate Character
+            </button>
+          </div>
+
+          <div class="char-result hidden" id="charResult">
+            <div class="char-card-preview" id="charCardPreview"></div>
+            <div class="char-result-actions">
+              <button class="btn-secondary" id="regenCharBtn">Regenerate</button>
+              <button class="btn-primary" id="addCharBtn">Add to Story</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="chars-roster" id="charsRoster">
+          <h3 class="roster-title">Your Characters</h3>
+          <div class="roster-grid" id="rosterGrid">
+            <div class="roster-empty">
+              <span>⚗️</span>
+              <p>No characters forged yet. Generate your first one above.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ LIBRARY PANEL ═══ -->
+    <section class="panel" id="panel-library">
+      <div class="library-page">
+        <div class="page-header">
+          <h2 class="page-title">Story Library</h2>
+          <p class="page-sub">Your collected works</p>
+        </div>
+        <div class="library-grid" id="libraryGrid">
+          <div class="library-empty">
+            <span>📚</span>
+            <p>No stories saved yet. Forge your first story and save it here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Title Modal -->
+  <div class="modal-overlay hidden" id="titlesModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Choose a Title</h3>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <ul class="modal-titles" id="modalTitlesList"></ul>
+    </div>
+  </div>
+
+  <script src="js/particles.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
