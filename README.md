@@ -37,8 +37,7 @@
 
 ## 🚀 Live Demo
 
-- **Frontend:** https://subradeepM.github.io/story-forge
-- **Backend:** https://story-forge.onrender.com
+> [**✨ Try Story Forge Now!**](https://subradeep-story-forge.onrender.com)
 
 ---
 
