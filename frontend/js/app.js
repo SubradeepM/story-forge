@@ -2,7 +2,9 @@
    AI Story Forge — Main Application
    ═══════════════════════════════════════════ */
 
-const API = "http://127.0.0.1:3001/api";
+const API = window.location.hostname === "127.0.0.1"
+  ? "http://127.0.0.1:3001/api"
+  : "https://subradeep-story-forge.onrender.com/api";
 // ── State ──────────────────────────────────
 const state = {
   genre: "fantasy",
